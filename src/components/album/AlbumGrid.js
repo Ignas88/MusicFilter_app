@@ -11,17 +11,19 @@ class AlbumGrid extends Component {
   }
 
   render() {
-    console.log(this.props);
-    const { albums } = this.props;
+    // console.log(this.props);
+    const { feed } = this.props.albums;
 
     return (
       <React.Fragment>
         <Grid container spacing={24}>
-          {albums.feed && albums.feed.entry.map(album => (
+          {feed && feed.entry.map(album => (
             <Album
-              key={album.title}
-              title={album.name.label}
-              price={album.price.amount}
+              key={album.id.attributes['im:id']}
+              title={album.title.label}
+              price={parseFloat(album['im:price'].attributes.amount).toFixed(2)}
+              image={album['im:image'][0].label}
+              releaseDate={album['im:releaseDate'].attributes.label}
             />
           ))}
         </Grid>
@@ -31,7 +33,7 @@ class AlbumGrid extends Component {
 }
 
 AlbumGrid.propTypes = {
-  albums: PropTypes.array.isRequired,
+  albums: PropTypes.object.isRequired,
   getAlbums: PropTypes.func.isRequired
 };
 

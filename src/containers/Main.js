@@ -7,14 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import Sidebar from '../components/sidebar/Sidebar';
 import AlbumGrid from '../components/album/AlbumGrid';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const styles = {
   root: {
     display: 'flex',
     height: '100%',
     flexDirection: 'column',
-    paddingLeft: 240
+    paddingLeft: 300
   },
   appBar: {
     width: `calc(100% - ${drawerWidth}px)`,
@@ -26,8 +26,6 @@ const styles = {
     alignItems: 'flex-start',
     padding: 25,
     height: '100%',
-    overflow: 'scroll',
-    overflowX: 'hidden',
     marginTop: 65
   },
 };
