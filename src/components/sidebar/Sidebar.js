@@ -34,8 +34,54 @@ const styles = theme => ({
 });
 
 class Sidebar extends Component {
+  state = {
+    priceFormData: {
+      A: {
+        label: '0 - 5',
+        checked: true
+      },
+      B: {
+        label: '5 - 10',
+        checked: true
+      },
+      C: {
+        label: '10 - 15',
+        checked: true
+      },
+      D: {
+        label: '15 - 20',
+        checked: true
+      }
+    },
+    yearFormData: {
+      E: {
+        label: '2000',
+        checked: true
+      },
+      F: {
+        label: '2015',
+        checked: true
+      },
+      G: {
+        label: '2017',
+        checked: true
+      },
+      H: {
+        label: '2018',
+        checked: true
+      }
+    }
+  };
+
+  handleChange = key => event => {
+    key.checked = event.target.checked;
+    this.setState({[key]: key.checked });
+    // console.log(key);
+  };
+
   render() {
-    const {classes} = this.props;
+    const { classes } = this.props;
+    const { priceFormData, yearFormData } = this.state;
 
     return (
       <div className={classes.root}>
@@ -54,11 +100,25 @@ class Sidebar extends Component {
             <Divider />
             <Paper className={classes.paper} elevation={1}>
               <Typography variant="subtitle2">by Price:</Typography>
-              <Form />
+              {Object.keys(priceFormData).map(key => (
+                <Form
+                  key={priceFormData[key].label}
+                  checked={priceFormData[key].checked}
+                  label={priceFormData[key].label}
+                  onChange={this.handleChange(priceFormData[key])}
+                />
+              ))}
             </Paper>
             <Paper className={classes.paper} elevation={1}>
               <Typography variant="subtitle2">by Year:</Typography>
-              <Form />
+              {Object.keys(yearFormData).map(key => (
+                <Form
+                  key={yearFormData[key].label}
+                  checked={yearFormData[key].checked}
+                  label={yearFormData[key].label}
+                  onChange={this.handleChange(yearFormData[key])}
+                />
+              ))}
             </Paper>
           </div>
         </Drawer>

@@ -11,7 +11,6 @@ class AlbumGrid extends Component {
   }
 
   render() {
-    // console.log(this.props);
     const { feed } = this.props.albums;
 
     return (
