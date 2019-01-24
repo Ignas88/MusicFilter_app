@@ -3,6 +3,6 @@ import albumReducer from './albumReducer';
 import formReducer from './formReducer';
 
 export default combineReducers({
-  album: albumReducer,
+  albums: albumReducer,
   formData: formReducer,
 });

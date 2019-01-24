@@ -37,7 +37,7 @@ AlbumGrid.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  albums: state.album.albums
+  albums: state.albums.albums
 });
 
 export default connect(mapStateToProps, {getAlbums})(AlbumGrid);
