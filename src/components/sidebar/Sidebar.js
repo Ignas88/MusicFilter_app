@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -6,6 +7,8 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Form from './Form';
+import {getFormData} from "../../actions/formActions";
+import {filterAlbums} from "../../actions/albumActions";
 
 const drawerWidth = 300;
 
@@ -34,54 +37,26 @@ const styles = theme => ({
 });
 
 class Sidebar extends Component {
-  state = {
-    priceFormData: {
-      A: {
-        label: '0 - 5',
-        checked: true
-      },
-      B: {
-        label: '5 - 10',
-        checked: true
-      },
-      C: {
-        label: '10 - 15',
-        checked: true
-      },
-      D: {
-        label: '15 - 20',
-        checked: true
-      }
-    },
-    yearFormData: {
-      E: {
-        label: '2000',
-        checked: true
-      },
-      F: {
-        label: '2015',
-        checked: true
-      },
-      G: {
-        label: '2017',
-        checked: true
-      },
-      H: {
-        label: '2018',
-        checked: true
-      }
-    }
-  };
+
+  componentDidMount() {
+    this.props.getFormData();
+  }
 
   handleChange = key => event => {
     key.checked = event.target.checked;
     this.setState({[key]: key.checked });
-    // console.log(key);
+    console.log(key);
+    this.props.filterAlbums({
+      price: {
+        min: 0,
+        max:15
+      },
+      year: [2000,2005]
+    });
   };
 
   render() {
-    const { classes } = this.props;
-    const { priceFormData, yearFormData } = this.state;
+    const { classes, formData } = this.props;
 
     return (
       <div className={classes.root}>
@@ -100,23 +75,23 @@ class Sidebar extends Component {
             <Divider />
             <Paper className={classes.paper} elevation={1}>
               <Typography variant="subtitle2">by Price:</Typography>
-              {Object.keys(priceFormData).map(key => (
+              {Object.keys(formData.priceFormData).map(key => (
                 <Form
-                  key={priceFormData[key].label}
-                  checked={priceFormData[key].checked}
-                  label={priceFormData[key].label}
-                  onChange={this.handleChange(priceFormData[key])}
+                  key={formData.priceFormData[key].label}
+                  checked={formData.priceFormData[key].checked}
+                  label={formData.priceFormData[key].label}
+                  onChange={this.handleChange(formData.priceFormData[key])}
                 />
               ))}
             </Paper>
             <Paper className={classes.paper} elevation={1}>
               <Typography variant="subtitle2">by Year:</Typography>
-              {Object.keys(yearFormData).map(key => (
+              {Object.keys(formData.yearFormData).map(key => (
                 <Form
-                  key={yearFormData[key].label}
-                  checked={yearFormData[key].checked}
-                  label={yearFormData[key].label}
-                  onChange={this.handleChange(yearFormData[key])}
+                  key={formData.yearFormData[key].label}
+                  checked={formData.yearFormData[key].checked}
+                  label={formData.yearFormData[key].label}
+                  onChange={this.handleChange(formData.yearFormData[key])}
                 />
               ))}
             </Paper>
@@ -129,6 +104,12 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired,
+  getFormData: PropTypes.func.isRequired,
+  formData: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Sidebar);
+const mapStateToProps = (state) => ({
+  formData: state.formData.formData
+});
+
+export default connect(mapStateToProps, {getFormData, filterAlbums})(withStyles(styles)(Sidebar));

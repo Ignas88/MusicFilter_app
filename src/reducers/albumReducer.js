@@ -1,7 +1,7 @@
-import { GET_ALBUMS } from "../actions/types";
+import { GET_ALBUMS, FILTER_ALBUMS } from "../actions/types";
 
 const initialState = {
-  albums: {}
+  albums: []
 };
 
 export default function (state = initialState, action) {
@@ -10,6 +10,17 @@ export default function (state = initialState, action) {
       return {
         ...state,
         albums: action.payload
+      };
+    case FILTER_ALBUMS:
+      console.log(action);
+      let albums = state.albums;
+      albums = albums.filter((album) => {
+        return album['im:price'].attributes.amount > 15
+      });
+      console.log(albums);
+      return {
+        ...state,
+        albums
       };
     default:
       return state;

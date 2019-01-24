@@ -11,12 +11,12 @@ class AlbumGrid extends Component {
   }
 
   render() {
-    const { feed } = this.props.albums;
+    const { albums } = this.props;
 
     return (
       <React.Fragment>
         <Grid container spacing={24}>
-          {feed && feed.entry.map(album => (
+          {albums && albums.map(album => (
             <Album
               key={album.id.attributes['im:id']}
               title={album.title.label}
@@ -32,7 +32,7 @@ class AlbumGrid extends Component {
 }
 
 AlbumGrid.propTypes = {
-  albums: PropTypes.object.isRequired,
+  albums: PropTypes.array.isRequired,
   getAlbums: PropTypes.func.isRequired
 };
 
