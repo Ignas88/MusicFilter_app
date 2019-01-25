@@ -4,38 +4,42 @@ const initialState = {
   formData: {
     priceFormData: {
       A: {
-        label: '0 - 5',
-        checked: false
+        checked: false,
+        min: 0,
+        max: 5
       },
       B: {
-        label: '5 - 10',
-        checked: false
+        checked: false,
+        min: 5,
+        max: 10
       },
       C: {
-        label: '10 - 15',
-        checked: false
+        checked: false,
+        min: 10,
+        max: 15
       },
       D: {
-        label: '15 - 20',
-        checked: false
+        checked: false,
+        min: 15,
+        max: 20
       }
     },
     yearFormData: {
       E: {
-        label: '2000',
-        checked: false
+        checked: false,
+        year: 2000
       },
       F: {
-        label: '2015',
-        checked: false
+        checked: false,
+        year: 2015
       },
       G: {
-        label: '2017',
-        checked: false
+        checked: false,
+        year: 2017
       },
       H: {
-        label: '2018',
-        checked: false
+        checked: false,
+        year: 2018
       }
     }
   }

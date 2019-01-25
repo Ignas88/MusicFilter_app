@@ -43,16 +43,27 @@ class Sidebar extends Component {
   }
 
   handleChange = key => event => {
+    const { filterAlbums } = this.props;
     key.checked = event.target.checked;
     this.setState({[key]: key.checked });
-    console.log(key);
-    this.props.filterAlbums({
-      price: {
-        min: 0,
-        max:15
-      },
-      year: [2000,2005]
-    });
+
+    if (key.checked) {
+      filterAlbums({
+        price: {
+          min: key.min,
+          max: key.max
+        },
+        year: key.year
+      });
+    } else {
+      filterAlbums({
+        price: {
+          min: null,
+          max: null
+        },
+        year: null
+      });
+    }
   };
 
   render() {
@@ -77,9 +88,9 @@ class Sidebar extends Component {
               <Typography variant="subtitle2">by Price:</Typography>
               {Object.keys(formData.priceFormData).map(key => (
                 <Form
-                  key={formData.priceFormData[key].label}
+                  key={formData.priceFormData[key].min}
                   checked={formData.priceFormData[key].checked}
-                  label={formData.priceFormData[key].label}
+                  label={`${formData.priceFormData[key].min} - ${formData.priceFormData[key].max}`}
                   onChange={this.handleChange(formData.priceFormData[key])}
                 />
               ))}
@@ -88,9 +99,9 @@ class Sidebar extends Component {
               <Typography variant="subtitle2">by Year:</Typography>
               {Object.keys(formData.yearFormData).map(key => (
                 <Form
-                  key={formData.yearFormData[key].label}
+                  key={formData.yearFormData[key].year}
                   checked={formData.yearFormData[key].checked}
-                  label={formData.yearFormData[key].label}
+                  label={formData.yearFormData[key].year}
                   onChange={this.handleChange(formData.yearFormData[key])}
                 />
               ))}
@@ -105,6 +116,7 @@ class Sidebar extends Component {
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired,
   getFormData: PropTypes.func.isRequired,
+  filterAlbums: PropTypes.func.isRequired,
   formData: PropTypes.object.isRequired
 };
 

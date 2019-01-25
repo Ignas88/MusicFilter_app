@@ -11,12 +11,18 @@ class AlbumGrid extends Component {
   }
 
   render() {
-    const { albums } = this.props;
+    const { initialAlbums, filteredAlbums } = this.props;
+    let albums = [];
+    if (filteredAlbums.length > 0) {
+      albums = filteredAlbums
+    } else {
+      albums = initialAlbums
+    }
 
     return (
       <React.Fragment>
         <Grid container spacing={24}>
-          {albums && albums.map(album => (
+          {albums.map(album => (
             <Album
               key={album.id.attributes['im:id']}
               title={album.title.label}
@@ -32,12 +38,13 @@ class AlbumGrid extends Component {
 }
 
 AlbumGrid.propTypes = {
-  albums: PropTypes.array.isRequired,
+  initialAlbums: PropTypes.array.isRequired,
   getAlbums: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
-  albums: state.albums.albums
+  initialAlbums: state.albums.initialAlbums,
+  filteredAlbums: state.albums.filteredAlbums
 });
 
 export default connect(mapStateToProps, {getAlbums})(AlbumGrid);
