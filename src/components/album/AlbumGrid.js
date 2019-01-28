@@ -11,9 +11,9 @@ class AlbumGrid extends Component {
   }
 
   render() {
-    const { initialAlbums, filteredAlbums } = this.props;
+    const { initialAlbums, filteredAlbums} = this.props;
     let albums = [];
-    if (filteredAlbums.length > 0) {
+    if (filteredAlbums) {
       albums = filteredAlbums
     } else {
       albums = initialAlbums

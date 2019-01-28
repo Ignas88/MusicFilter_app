@@ -1,8 +1,8 @@
-import { GET_ALBUMS, FILTER_ALBUMS } from "../actions/types";
+import {GET_ALBUMS, FILTER_ALBUMS} from "../actions/types";
 
 const initialState = {
   initialAlbums: [],
-  filteredAlbums: []
+  filteredAlbums: null
 };
 
 export default function (state = initialState, action) {
@@ -14,19 +14,23 @@ export default function (state = initialState, action) {
         filteredAlbums: state.filteredAlbums
       };
     case FILTER_ALBUMS:
-      console.log(action);
       let albums = state.initialAlbums;
 
-      if (action.payload.price.min || action.payload.price.max) {
+      if (action.payload.price && action.payload.price.length > 0) {
         albums = albums.filter((album) => {
-          return album['im:price'].attributes.amount >= action.payload.price.min && album['im:price'].attributes.amount <= action.payload.price.max;
+          const itemPrice = album['im:price'].attributes.amount;
+          const priceFilters = action.payload.price.filter((price) => {
+            return itemPrice > price.min && itemPrice < price.max;
+
+          });
+          return priceFilters.length > 0;
         });
       }
 
-      if (action.payload.year) {
+      if (action.payload.year && action.payload.year > 0) {
         albums = albums.filter((album) => {
           const year = new Date(album['im:releaseDate'].attributes.label);
-          return year.getFullYear() === action.payload.year;
+          return action.payload.year.indexOf(year.getFullYear()) !== -1;
         });
       }
 

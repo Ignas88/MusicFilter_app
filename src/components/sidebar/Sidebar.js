@@ -43,27 +43,28 @@ class Sidebar extends Component {
   }
 
   handleChange = key => event => {
-    const { filterAlbums } = this.props;
+    const { filterAlbums, formData } = this.props;
     key.checked = event.target.checked;
     this.setState({[key]: key.checked });
 
-    if (key.checked) {
-      filterAlbums({
-        price: {
-          min: key.min,
-          max: key.max
-        },
-        year: key.year
-      });
-    } else {
-      filterAlbums({
-        price: {
-          min: null,
-          max: null
-        },
-        year: null
-      });
-    }
+    let yearFilter = Object.keys(formData.yearFormData).reduce((array, key) =>{
+      if(formData.yearFormData[key].checked){
+        array.push(formData.yearFormData[key].year);
+      }
+      return array;
+    }, []);
+
+    let priceFilter = Object.keys(formData.priceFormData).reduce((array, key) =>{
+      if(formData.priceFormData[key].checked){
+        array.push({min: formData.priceFormData[key].min, max: formData.priceFormData[key].max });
+      }
+      return array;
+    }, []);
+
+    filterAlbums({
+      price: priceFilter,
+      year: yearFilter
+    });
   };
 
   render() {
@@ -115,9 +116,9 @@ class Sidebar extends Component {
 
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired,
+  formData: PropTypes.object.isRequired,
   getFormData: PropTypes.func.isRequired,
-  filterAlbums: PropTypes.func.isRequired,
-  formData: PropTypes.object.isRequired
+  filterAlbums: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
