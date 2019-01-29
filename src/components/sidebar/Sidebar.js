@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import Form from './Form';
 import {getFormData} from "../../actions/formActions";
-import {filterAlbums} from "../../actions/albumActions";
+import {filterAlbums, getAlbums} from "../../actions/albumActions";
 
 const drawerWidth = 300;
 
@@ -40,7 +40,41 @@ class Sidebar extends Component {
 
   componentDidMount() {
     this.props.getFormData();
+    this.props.getAlbums();
   }
+
+  getTotalByYear = (key) => {
+    const {formData, initialAlbums} = this.props;
+
+    let yearFilter = formData.yearFormData[key];
+    let count = 0;
+
+    for (let i = 0; i < initialAlbums.length; i++) {
+      let album = initialAlbums[i];
+
+      const year = new Date(album['im:releaseDate'].attributes.label);
+      if (year.getFullYear() === yearFilter.year)
+        count++;
+    }
+    return count;
+  };
+
+  getTotalByPrice = (key) => {
+    const {formData, initialAlbums} = this.props;
+
+    let minPrice = formData.priceFormData[key].min;
+    let maxPrice = formData.priceFormData[key].max;
+    let count = 0;
+
+    for (let i = 0; i < initialAlbums.length; i++) {
+      let album = initialAlbums[i];
+
+      const price = album['im:price'].attributes.amount;
+      if (price >= minPrice && price <= maxPrice)
+        count++;
+    }
+    return count;
+  };
 
   handleChange = key => event => {
     const { filterAlbums, formData } = this.props;
@@ -91,7 +125,7 @@ class Sidebar extends Component {
                 <Form
                   key={formData.priceFormData[key].min}
                   checked={formData.priceFormData[key].checked}
-                  label={`${formData.priceFormData[key].min} - ${formData.priceFormData[key].max} (10)`}
+                  label={`${formData.priceFormData[key].min} - ${formData.priceFormData[key].max} (${this.getTotalByPrice(key)})`}
                   onChange={this.handleChange(formData.priceFormData[key])}
                 />
               ))}
@@ -102,7 +136,7 @@ class Sidebar extends Component {
                 <Form
                   key={formData.yearFormData[key].year}
                   checked={formData.yearFormData[key].checked}
-                  label={formData.yearFormData[key].year}
+                  label={`${formData.yearFormData[key].year} (${this.getTotalByYear(key)})`}
                   onChange={this.handleChange(formData.yearFormData[key])}
                 />
               ))}
@@ -117,12 +151,15 @@ class Sidebar extends Component {
 Sidebar.propTypes = {
   classes: PropTypes.object.isRequired,
   formData: PropTypes.object.isRequired,
+  initialAlbums: PropTypes.array.isRequired,
   getFormData: PropTypes.func.isRequired,
+  getAlbums: PropTypes.func.isRequired,
   filterAlbums: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state) => ({
+  initialAlbums: state.albums.initialAlbums,
   formData: state.formData.formData
 });
 
-export default connect(mapStateToProps, {getFormData, filterAlbums})(withStyles(styles)(Sidebar));
+export default connect(mapStateToProps, {getFormData, getAlbums, filterAlbums})(withStyles(styles)(Sidebar));

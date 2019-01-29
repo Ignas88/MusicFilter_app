@@ -39,6 +39,7 @@ class AlbumGrid extends Component {
 
 AlbumGrid.propTypes = {
   initialAlbums: PropTypes.array.isRequired,
+  filteredAlbums: PropTypes.array,
   getAlbums: PropTypes.func.isRequired
 };
 
