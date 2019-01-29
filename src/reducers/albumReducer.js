@@ -21,19 +21,18 @@ export default function (state = initialState, action) {
           const itemPrice = album['im:price'].attributes.amount;
           const priceFilters = action.payload.price.filter((price) => {
             return itemPrice > price.min && itemPrice < price.max;
-
           });
           return priceFilters.length > 0;
         });
       }
 
-      if (action.payload.year && action.payload.year > 0) {
+
+      if (action.payload.year && action.payload.year.length > 0) {
         albums = albums.filter((album) => {
           const year = new Date(album['im:releaseDate'].attributes.label);
           return action.payload.year.indexOf(year.getFullYear()) !== -1;
         });
       }
-
       return {
         ...state,
         filteredAlbums: albums

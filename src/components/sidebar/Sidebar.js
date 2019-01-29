@@ -91,7 +91,7 @@ class Sidebar extends Component {
                 <Form
                   key={formData.priceFormData[key].min}
                   checked={formData.priceFormData[key].checked}
-                  label={`${formData.priceFormData[key].min} - ${formData.priceFormData[key].max}`}
+                  label={`${formData.priceFormData[key].min} - ${formData.priceFormData[key].max} (10)`}
                   onChange={this.handleChange(formData.priceFormData[key])}
                 />
               ))}
